@@ -51,24 +51,11 @@ class simpleAvoidance(gym.Env):
         else:
             self.reward = -1
 
+        # TODO: This needs to be part of frame_environment.terminal_check()
         # if its the last frame then stop
         if self.frame.frame_step == 800:
             self.terminal = True
-            self.reward   = 0
-
-        # info = """
-        #        action   : {}
-        #        reward   : {}
-        #        terminal : {}
-        #        step     : {}
-        #        agent    : {}
-        #        \n
-        #        """.format(self.move[action],
-        #                   self.reward,
-        #                   self.terminal,
-        #                   self.frame.frame_step,
-        #                   self.frame.agent_position[0] + self.frame.agent_movement)
-        # print(info)
+            self.reward   = 1
 
         return self.state, self.reward, self.terminal, {}
 
