@@ -1,7 +1,7 @@
 ### Objective:
 
 There is a beautiful blue square who is trying its hardest to avoid the stinky green bars.
-The green bars are moving towards the agent whose actions are going left or right, or do nothing.
+The green bars are moving towards the agent whose actions are going left, right, or do nothing.
 
 ### Folder structure
 
