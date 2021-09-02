@@ -1,8 +1,3 @@
-import time
-from multiprocessing import Process
-
-PROCESSES = 10
-
 import gym
 import numpy as np
 from gym.utils import seeding
@@ -13,10 +8,10 @@ import os, sys
 from stable_baselines.common.policies import CnnPolicy
 from stable_baselines.common.callbacks import BaseCallback
 from stable_baselines.common.evaluation import evaluate_policy
+import multiprocessing as mp
 from multiprocessing import Process, Queue
-from multiprocessing import Manager
 from stable_baselines.common.callbacks import EvalCallback, StopTrainingOnRewardThreshold
-
+import time
 
 ci_build_and_not_headless = False
 try:
@@ -150,6 +145,7 @@ class Car():
         self.pr.stop()
         self.pr.shutdown()
 
+
 class lineFollower(gym.Env):
 
     # initialize
@@ -215,13 +211,96 @@ class lineFollower(gym.Env):
     def shutdown(self):
         self.carAgent.shutdown()
 
-def run():
+
+def run(queue):
   pr = lineFollower()
   print("start")
   time.sleep(20)
   print("end")
   pr.shutdown()
+  queue.put("Hello")
 
-processes = [Process(target=run, args=()) for i in range(2)]
-[p.start() for p in processes]
-[p.join() for p in processes]
+def evaluate_policy_process(model, n_eval_episodes,deterministic, queue):
+    eval_env = lineFollower()
+    time.sleep(20)
+    print("TEST _ !")
+    mean_reward, _ = evaluate_policy(
+        model,
+        eval_env,
+        n_eval_episodes = n_eval_episodes,
+        deterministic   = deterministic
+    )
+    eval_env.shutdown()
+    print("TEST _ 2222")
+    queue.put(mean_reward)
+
+class eval(BaseCallback):
+
+    def __init__(self,
+                 n_eval_episodes: int = 1,
+                 deterministic: bool  = True,
+                 reward_threshold     = None,
+                 path                 = None,
+                 eval_freq            = 10,
+                 queue                = None):
+
+        super().__init__()
+        self._n_eval_episodes  = n_eval_episodes
+        self._eval_freq        = eval_freq
+        self._deterministic    = deterministic
+        self._reward_threshold = reward_threshold
+        self._path             = path
+        self.queue             = queue
+
+    def _on_step(self) -> bool:
+        print(self.n_calls)
+        if self.n_calls % self._eval_freq == 0:
+            print("EVALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+            p = Process(name = "eval",
+                        target = run,
+                        args=(self.queue,))
+            p.start()
+            mean = self.queue.get()
+            print(mean)
+            print("EVALLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL")
+            p.join()
+
+            #if mean_reward >= self._reward_threshold:
+            if True:
+                self.model.save(self._path)
+                #print(mean_reward)
+                return False
+        return True
+
+def train(queue):
+
+    # create env to train
+    train_env = lineFollower()
+    print("THIS IS WHERE IT CRAPS OUT")
+
+    print("THIS IS WHERE IT CRAPS OUT HAHA")
+    # Specify model
+    model = PPO2(CnnPolicy,
+                 train_env,
+                 n_steps=256)
+
+    # specify callback
+    eval_callback = eval(n_eval_episodes  = 3,
+                         deterministic    = True,
+                         reward_threshold = 100000,
+                         path             = "test_run_model",
+                         queue            = queue)
+
+    # train model
+    model.learn(total_timesteps = int(200000),
+                callback        = eval_callback)
+
+if __name__ == '__main__':
+    mp.set_start_method('spawn')
+    # Queue for holding values in processes
+    queue_process = Queue()
+
+    train(queue_process)
+
+    # train_process = Process(name = "Train",target=train, args=(queue_process,))
+    # train_process.start()
