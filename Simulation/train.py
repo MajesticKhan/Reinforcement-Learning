@@ -8,7 +8,7 @@ import numpy as np
 
 def evaluate_policy_process(model, n_eval_episodes,deterministic, queue):
     """
-     :param model           : Trained model to be evaluated
+     :param model           : path to trained model to be evaluated
      :param n_eval_episodes : How many times to evaluate the environment
      :param deterministic   : Should the model be stochastic or deterministic
      :param queue           : Queue to allow values to be exchanged
