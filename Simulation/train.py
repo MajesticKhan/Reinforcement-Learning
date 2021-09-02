@@ -1,11 +1,10 @@
 from stable_baselines import PPO2
 from stable_baselines.common.policies import CnnPolicy
 from stable_baselines.common.callbacks import BaseCallback
-from stable_baselines.common.evaluation import evaluate_policy
 import multiprocessing as mp
 from multiprocessing import Process, Queue
 from env import lineFollower
-
+import numpy as np
 
 def evaluate_policy_process(model, n_eval_episodes,deterministic, queue):
     """
@@ -16,21 +15,30 @@ def evaluate_policy_process(model, n_eval_episodes,deterministic, queue):
     """
 
     # Load separate environment for evaluation
-    eval_env = lineFollower()
+    env = lineFollower()
 
     # calculate mean reward
-    mean_reward, _ = evaluate_policy(
-        model,
-        eval_env,
-        n_eval_episodes = n_eval_episodes,
-        deterministic   = deterministic
-    )
+    episode_rewards = []
+
+    # load model
+    model = PPO2.load(model)
+
+    for _ in range(n_eval_episodes):
+        reward_sum = 0
+        done       = False
+        obs        = env.reset()
+
+        while not done:
+            action, _states = model.predict(obs, deterministic = deterministic)
+            obs, reward, done, info = env.step(action)
+            reward_sum += reward
+        episode_rewards.append(reward_sum)
 
     # shutdown environment
-    eval_env.shutdown()
+    env.shutdown()
 
     # Put reward value into queue
-    queue.put(mean_reward)
+    queue.put(np.mean(episode_rewards))
 
 
 class eval(BaseCallback):
@@ -57,10 +65,13 @@ class eval(BaseCallback):
 
         if self.n_calls % self._eval_freq == 0:
 
+            # Write eval model
+            self.model.save(self._path + "_eval")
+
             # Create a separate evaluation process
             p = Process(name = "eval",
                         target = evaluate_policy_process,
-                        args=(self.model,
+                        args=(self._path + "_eval",
                               self._n_eval_episodes,
                               self._deterministic,
                               self.queue,))
@@ -75,7 +86,7 @@ class eval(BaseCallback):
             p.join()
 
             if mean_reward >= self._reward_threshold:
-                self.model.save(self._path)
+                self.model.save(self._path + "_final")
                 return False
 
         # Continue to train
@@ -101,7 +112,7 @@ def train(queue):
                          deterministic    = True,
                          reward_threshold = 100000,
                          path             = "lego_model",
-                         eval_freq        = 10,
+                         eval_freq        = 10000,
                          queue            = queue)
 
     # train model
