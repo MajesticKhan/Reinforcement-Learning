@@ -119,6 +119,10 @@ def train(queue):
     model.learn(total_timesteps = int(200000),
                 callback        = eval_callback)
 
+    # shutdown the simulator
+    train_env.shutdown()
+
+
 if __name__ == '__main__':
 
     # Make sure to start a brand new process
