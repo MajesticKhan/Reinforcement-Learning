@@ -2,11 +2,14 @@ import gym
 import numpy as np
 from gym.utils import seeding
 from gym import spaces
+from Simulation.Car import Car
+
 
 class lineFollower(gym.Env):
 
+
     # initialize
-    def __init__(self, Car):
+    def __init__(self):
 
         # initiate agent
         self.carAgent = Car()
@@ -19,6 +22,7 @@ class lineFollower(gym.Env):
 
         # define reward limitation
         self.reward_range = (-10000,100)
+
 
     def step(self,action):
 
@@ -50,10 +54,12 @@ class lineFollower(gym.Env):
         # return updated cycle
         return self.obs, self.reward, self.terminal, {}
 
+
     def seed(self, seed = None):
 
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+
 
     def reset(self):
 
@@ -64,6 +70,7 @@ class lineFollower(gym.Env):
         self.carAgent.updateSimulation()
 
         return self.carAgent.captureImage()
+
 
     def shutdown(self):
         self.carAgent.shutdown()
