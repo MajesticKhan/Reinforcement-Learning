@@ -2,7 +2,7 @@ import gym
 import numpy as np
 from gym.utils import seeding
 from gym import spaces
-from Simulation.Car import Car
+from Car import Car
 
 
 class lineFollower(gym.Env):
