@@ -26,6 +26,27 @@ def imageTransformation(image):
     return newImage
 
 
+def imageTransformationLego(image):
 
+    newImage = np.zeros(image.shape)
 
+    # fill in blue
+    newImage[np.where((image[:,:,0] <= 60)    &
+                      (image[:,:,0] >= 0)     &
+                      (image[:, :, 1] <= 120)  &
+                      (image[:, :, 1] >= 0)   &
+                      (image[:, :, 2] <= 255) &
+                      (image[:, :, 2] >= 100))] = [0,0,200]
+
+    # fill in green
+    newImage[np.where((image[:,:,0] <= 50)    &
+                      (image[:,:,0] >= 0)     &
+                      (image[:, :, 1] <= 255)  &
+                      (image[:, :, 1] >= 200)   &
+                      (image[:, :, 2] <= 50) &
+                      (image[:, :, 2] >= 0))] = [0,200,0]
+    # fill in gray
+    newImage[-30:,55:199,:] =[177,176,207]
+
+    return newImage.astype(np.uint8)
 
