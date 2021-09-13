@@ -27,34 +27,6 @@ class Car():
         self.BP.set_motor_power(self.engine_R, drive * 15)
         self.BP.set_motor_power(self.engine_L, -drive * 15)
 
-    def terminalCheck(self,test):
-        """
-        :param test: takes in an image to see if terminal state is reached.
-        Terminal state is defined if blue lane is outside of image
-        """
-
-        # focus on smaller slice of image
-        test = test[-40:230]
-
-
-        # Get the left and right boundaries of the car's hood
-        left = test[:, 55, :]
-        right = test[:, 198, :]
-
-
-        # check if there is any blue
-        left_check_blue = ((left[:, 0] <= 10) & (left[:, 1] <= 10) & (200 <= left[:, 2])).sum()
-        right_check_blue = ((right[:, 0] <= 10) & (right[:, 1] <= 10) & (200 <= right[:, 2])).sum()
-
-
-        # check if there is any Green
-        check_green = ((test[:, :, 0] <= 10) & (200 <= test[:, :, 1]) & (test[:, :, 2] <= 10)).sum()
-
-        if (left_check_blue + right_check_blue) != 0 or (check_green) != 0:
-            self.update(action=2, drive=0)
-            return True
-        return False
-
 
 #--------------------------------------------------------Read model
 model = PPO2.load("lego_model_transformed_final.zip")
