@@ -7,7 +7,7 @@ import numpy as np
 env = lineFollower()
 
 # load model
-model = PPO2.load("lego_model_final.zip")
+model = PPO2.load("model_final.zip")
 
 # Store image
 images = []

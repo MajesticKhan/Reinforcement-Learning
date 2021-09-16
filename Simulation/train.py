@@ -112,7 +112,7 @@ def train(queue):
     eval_callback = eval(n_eval_episodes  = 5,
                          deterministic    = True,
                          reward_threshold = 10000,
-                         path             = "lego_model",
+                         path             = "model",
                          eval_freq        = 10000,
                          queue            = queue)
 

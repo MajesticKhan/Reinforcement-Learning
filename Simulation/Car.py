@@ -14,12 +14,12 @@ if sys.platform.startswith("linux") and ci_and_not_headless:
 if sys.platform.startswith("linux") and ci_and_not_headless:
     os.environ.pop("QT_QPA_FONTDIR")
 
-# Create a class that Pyrep can communicate with Coppeliasim using the legocar.ttt
+# Create a class that Pyrep can communicate with Coppeliasim using the car.ttt
 class Car():
 
 
     # initialize Pyrep
-    def __init__(self, pathToScene = 'legocar.ttt'):
+    def __init__(self, pathToScene = 'car.ttt'):
         """
         Initialize the parameters to start the simulation
         :param pathToScene: path the coppeliasim environment
