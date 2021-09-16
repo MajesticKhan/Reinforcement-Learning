@@ -10,7 +10,7 @@ except:
     pass
 if sys.platform.startswith("linux") and ci_and_not_headless:
     os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH")
-    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = "/home/gal/coppelia/CoppeliaSim_Edu_V4_2_0_Ubuntu18_04"
+    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = "Path to CoppeliaSim_Edu_V4_2_0_Ubuntu18_04"
 if sys.platform.startswith("linux") and ci_and_not_headless:
     os.environ.pop("QT_QPA_FONTDIR")
 
