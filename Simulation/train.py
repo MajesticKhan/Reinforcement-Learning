@@ -92,6 +92,7 @@ class eval(BaseCallback):
         # Continue to train
         return True
 
+
 def train(queue):
     """
     :param queue: Queue to collect and output results
@@ -108,9 +109,9 @@ def train(queue):
 
 
     # Specify callback to evaluate training
-    eval_callback = eval(n_eval_episodes  = 3,
+    eval_callback = eval(n_eval_episodes  = 5,
                          deterministic    = True,
-                         reward_threshold = 100000,
+                         reward_threshold = 10000,
                          path             = "lego_model",
                          eval_freq        = 10000,
                          queue            = queue)

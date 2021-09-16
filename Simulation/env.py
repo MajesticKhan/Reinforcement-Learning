@@ -8,7 +8,7 @@ from Car import Car
 class lineFollower(gym.Env):
 
 
-    # initialize
+    # initialize the gym environment
     def __init__(self):
 
         # initiate agent
@@ -36,7 +36,15 @@ class lineFollower(gym.Env):
         self.obs = self.carAgent.captureImage()
 
         # get reward
-        self.reward = 1
+        if action == 0:
+            self.reward = 1
+        else:
+            self.reward = .5
+
+        if self.carAgent.middleCheck(self.obs):
+            self.reward += 2
+        else:
+            self.reward = -.5
 
         # Handle terminal states
         self.terminal = False
@@ -48,10 +56,11 @@ class lineFollower(gym.Env):
 
         if terminalStatus == "Green":
             self.terminal = True
-            self.reward   = 100000
+            self.reward   = 10000
 
         print("Action: {} | Reward: {} | Terminal State {}".format(action, self.reward, self.terminal))
-        # return updated cycle
+
+        # return updated cycle given input action
         return self.obs, self.reward, self.terminal, {}
 
 
@@ -73,4 +82,6 @@ class lineFollower(gym.Env):
 
 
     def shutdown(self):
+
+        # Stop the simulation
         self.carAgent.shutdown()

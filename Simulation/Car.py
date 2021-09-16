@@ -2,7 +2,6 @@ import numpy as np
 from pyrep import PyRep, objects
 import os, sys
 
-# TODO: I totally forgot what this does
 ci_build_and_not_headless = False
 try:
     from cv2.version import ci_build, headless
@@ -15,10 +14,11 @@ if sys.platform.startswith("linux") and ci_and_not_headless:
 if sys.platform.startswith("linux") and ci_and_not_headless:
     os.environ.pop("QT_QPA_FONTDIR")
 
-# Create a class that Pyrep can communicate with Coppeliasim
+# Create a class that Pyrep can communicate with Coppeliasim using the legocar.ttt
 class Car():
 
-    # initialize
+
+    # initialize Pyrep
     def __init__(self, pathToScene = 'legocar.ttt'):
         """
         Initialize the parameters to start the simulation
@@ -37,21 +37,21 @@ class Car():
         self.car = objects.shape.Shape("car")
 
 
-        # establish steering
+        # establish steering connection
         self.front_right_steer = objects.joint.Joint("front_right_steer")
         self.rear_right_steer  = objects.joint.Joint("rear_right_steer")
         self.front_left_steer  = objects.joint.Joint("front_left_steer")
         self.rear_left_steer   = objects.joint.Joint("rear_left_steer")
 
 
-        # establish motor
+        # establish motor connection
         self.front_right_motor = objects.joint.Joint("front_right_motor")
         self.rear_right_motor  = objects.joint.Joint("rear_right_motor")
         self.front_left_motor  = objects.joint.Joint("front_left_motor")
         self.rear_left_motor   = objects.joint.Joint("rear_left_motor")
 
 
-        # establish steering position for rear wheels TODO: motor should be disabled
+        # establish steering position for rear wheels
         self.rear_right_steer.set_joint_target_velocity(0)
         self.rear_left_steer.set_joint_target_velocity(0)
 
@@ -63,7 +63,7 @@ class Car():
         self.rear_left_motor.set_joint_target_velocity(1)
 
 
-        # Set Camera
+        # Set Camera connection
         self.camera = objects.vision_sensor.VisionSensor("frontCamera")
 
 
@@ -77,40 +77,68 @@ class Car():
 
 
     def steering(self, action, turningAngle = .2):
+
         """
         :param action       : either turn left or right
         :param turningAngle : angle of turning the wheel
         """
 
-        # If action is left
+        # Turn Left
         if action == 0:
             self.front_left_steer.set_joint_target_position(turningAngle)
             self.front_right_steer.set_joint_target_position(turningAngle)
-        # if action is right
+
+        # Turn Right
         elif action == 1:
             self.front_left_steer.set_joint_target_position(-turningAngle)
             self.front_right_steer.set_joint_target_position(-turningAngle)
-        # if action is no steering
+
+        # No Steering
         elif action == 2:
             self.front_left_steer.set_joint_target_position(0)
             self.front_right_steer.set_joint_target_position(0)
+
+        # We got a problem
         else:
             raise ValueError("Too Many actions")
 
+    def middleCheck(self,image):
 
-    def terminalCheck(self,test):
         """
-        :param test: takes in an image to see if terminal state is reached.
+        :param image: takes in an image to see if line is in middle of the car for better reward
+        """
+
+        # Focus on smaller slice of image
+        image = image[-40:230]
+
+
+        # Get the left and right boundaries of the car's hood
+        left  = image[:, 55+55, :]
+        right = image[:, 198-55, :]
+
+        # Check if there is any blue
+        left_check_blue = ((left[:, 0] <= 10) & (left[:, 1] <= 10) & (200 <= left[:, 2])).sum()
+        right_check_blue = ((right[:, 0] <= 10) & (right[:, 1] <= 10) & (200 <= right[:, 2])).sum()
+
+        if (left_check_blue + right_check_blue) != 0:
+            return True
+        return False
+
+
+    def terminalCheck(self,image):
+
+        """
+        :param image: takes in an image to see if terminal state is reached.
         Terminal state is defined if blue lane is outside of image
         """
 
         # focus on smaller slice of image
-        test = test[-40:230]
+        image = image[-40:230]
 
 
         # Get the left and right boundaries of the car's hood
-        left = test[:, 55, :]
-        right = test[:, 198, :]
+        left = image[:, 55, :]
+        right = image[:, 198, :]
 
 
         # check if there is any blue
@@ -119,13 +147,10 @@ class Car():
 
 
         # check if there is any Green
-        check_green = ((test[:, :, 0] <= 10) & (200 <= test[:, :, 1]) & (test[:, :, 2] <= 10)).sum()
-
+        check_green = ((image[:, :, 0] <= 10) & (200 <= image[:, :, 1]) & (image[:, :, 2] <= 10)).sum()
 
         if (left_check_blue + right_check_blue) != 0:
             return "Blue"
-
-
         if (check_green) != 0:
             return "Green"
 
@@ -139,6 +164,7 @@ class Car():
 
 
     def reset(self):
+
         """
         Return the car to the original position
         """
@@ -146,6 +172,7 @@ class Car():
 
 
     def shutdown(self):
+
         """
         Shutdown the simulation
         """

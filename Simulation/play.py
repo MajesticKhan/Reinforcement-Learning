@@ -21,6 +21,6 @@ while not done:
 
 # shutdown environment
 env.shutdown()
-imageio.mimsave('foundation.gif', [np.array(img) for i, img in enumerate(images) if i%2 == 0], fps=29)
+imageio.mimsave('foundation.gif', [np.array(img) for i, img in enumerate(images) if i%4 == 0], fps=29)
 
 
