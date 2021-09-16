@@ -9,7 +9,10 @@ env = lineFollower()
 # load model
 model = PPO2.load("lego_model_final.zip")
 
+# Store image
 images = []
+
+# Set environment and get image
 obs    = env.reset()
 images.append(obs)
 
@@ -22,5 +25,3 @@ while not done:
 # shutdown environment
 env.shutdown()
 imageio.mimsave('foundation.gif', [np.array(img) for i, img in enumerate(images) if i%4 == 0], fps=29)
-
-
