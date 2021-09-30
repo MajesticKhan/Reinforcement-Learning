@@ -2,7 +2,6 @@
 import numpy as np
 from pyrep import PyRep, objects
 import os, sys
-from functions import imageTransformationLego
 
 
 #--------------------------------------------------------Setup configuration
@@ -14,7 +13,7 @@ except:
     pass
 if sys.platform.startswith("linux") and ci_and_not_headless:
     os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH")
-    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = "path to CoppeliaSim_Edu_V4_2_0_Ubuntu20_04"
+    os.environ["QT_QPA_PLATFORM_PLUGIN_PATH"] = "/home/gal/coppelia/CoppeliaSim_Edu_V4_2_0_Ubuntu20_04"
 if sys.platform.startswith("linux") and ci_and_not_headless:
     os.environ.pop("QT_QPA_FONTDIR")
 
@@ -78,7 +77,7 @@ class Car():
         :return: return current image based on camera feed
         """
 
-        return imageTransformationLego(np.uint8(self.camera.capture_rgb() * 255.))
+        return np.uint8(self.camera.capture_rgb() * 255.)
 
 
     def steering(self, action, turningAngle = .2):

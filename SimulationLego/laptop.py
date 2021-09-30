@@ -72,7 +72,7 @@ while True:
         break
 
 # convert untransformed images to gif
-imageio.mimsave('foundation_O.gif', [np.array(img) for i, img in enumerate(images_O) if i % 2 == 0], fps=20)
+imageio.mimsave('Lego_raw.gif', [np.array(img) for i, img in enumerate(images_O) if i % 2 == 0], fps=20)
 
 # convert transformed images to gif
-imageio.mimsave('foundation_T.gif', [np.array(img) for i, img in enumerate(images_T) if i % 2 == 0], fps=20)
+imageio.mimsave('Lego_transformed.gif', [np.array(img) for i, img in enumerate(images_T) if i % 2 == 0], fps=20)
