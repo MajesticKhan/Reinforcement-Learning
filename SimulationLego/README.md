@@ -3,7 +3,8 @@
 
 
 ### Objective:
-Using CoppeliaSim, the lego car should be able to follow the blue line (masked tape) by using the trained simulated model.
+Using CoppeliaSim, the goal is to create and train an agent that can follow a blue line. Once the agent is trained, it will
+be transferred to the lego car which will follow the blue masked tape. 
 
 
 ### Side note:
