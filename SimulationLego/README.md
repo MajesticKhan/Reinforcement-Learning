@@ -9,7 +9,7 @@ be transferred to the lego car which will follow the blue masked tape.
 
 ### Side note:
 When training a model on a simulated environment, you want to mimic the real world as much as possible. The simulated car in `car_2.ttt`
-is not that similar to the lego car however the actions are close enough to the point that the model can be transferable to the actual lego car.
+is not similar to the lego car however the actions are close enough to the point that the agent can be transferable to the actual lego car.
 This is just an experiment for me to understand the basic components needed to train a simulated model and then applying it to a real robot. 
 
 
@@ -17,8 +17,10 @@ What makes this model different compared to the Simulation folder is that the in
 This allows the model to be used in the real world by easily transforming the image into a similar format. As a result,
 the model can easily be transferred to the lego car without any further complicated modifications.
 
-Finally, one can easily criticize how the objective was completed. For example, isolating the blue masked tape was done through simple filtering using 
-RGB values which is incredibly sensitive to light. It's a naive approach but the main focus is experimentation on applying a simulated model to an actual robot.
+Finally, one can easily criticize how the objective was completed. For example, isolating the blue line with a black background was done through simple filtering using 
+RGB values which is incredibly sensitive to light in the real world. It's a naive approach but the main focus is experimentation on applying a simulated model to an actual robot.
+
+A video of the robot moving will be posted later.
 
 
 ### Folder structure
