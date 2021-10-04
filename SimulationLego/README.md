@@ -7,6 +7,13 @@ Using CoppeliaSim, the goal is to create and train an agent that can follow a bl
 be transferred to the lego car which will follow the blue masked tape. The actions are limited to steering left or right to keep things simple
 as the goal is to understand how to train the agent and apply it to the lego robot.
 
+#### Check out the youtube videos!!
+- https://www.youtube.com/watch?v=nvduLdRa98s
+  - A video showing the lego car navigating the original track show in the gif below (the real world)
+- https://www.youtube.com/watch?v=ojLoy0G5CaU
+  - A video showing the lego car attempting to navigate a track similar to the simulated environment. 
+    Note how the lego car fails towards the end. The cause is due to light 
+    sensitivity which needs to be addressed moving forward 
 
 ### Side note:
 
@@ -51,12 +58,3 @@ These are legitimate concerns that will be addressed as the project matures.
 ### Take the new trained model and apply it to the lego car
 ![Alt Text](Lego_raw.gif)
 ![Alt Text](Lego_transformed.gif)
-
-### Check out the youtube videos!!
-- https://www.youtube.com/watch?v=nvduLdRa98s
-  - A video showing the lego car navigating the original track show in the gif above (the real world)
-- https://www.youtube.com/watch?v=ojLoy0G5CaU
-  - A video showing the lego car attempting to navigate a track similar to the simulated environment. 
-    Note how the lego car fails towards the end. The cause is due to light 
-    sensitivity which needs to be addressed moving forward 
-  
