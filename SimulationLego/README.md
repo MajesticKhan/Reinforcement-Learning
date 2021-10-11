@@ -1,4 +1,6 @@
+
 # Lego Car
+## Still in progress: updating model to handle new floor color
 ![Alt Text](legoCar.png)
 
 
