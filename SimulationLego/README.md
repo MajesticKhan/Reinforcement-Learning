@@ -16,8 +16,11 @@ to the raspberry pi.
 
 <img src="visuals/workflow.png"/>
 
+### Lego car's camera view!
+![Alt Text](visuals/Lego_camera_view.gif)
 
-#### Check out the youtube videos!!
+
+### Check out the youtube videos!!
 
 - https://www.youtube.com/watch?v=71SF15HbmlI
   - This particular video shows the lego car successfully navigating the blue masked tape using the trained model built from CoppeliaSim without any modifications  
@@ -43,9 +46,6 @@ to the raspberry pi.
 - laptop.py: file to run on a separate computer that can run the model and communicate with the raspberry pi
 
 
-### Simulated Car lego in new environment!
-![Alt Text](simulation_raw.gif)
-![Alt Text](simulation_transformed.gif)
 
 
 
