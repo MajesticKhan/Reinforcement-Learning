@@ -32,24 +32,12 @@ to the raspberry pi.
     sensitivity which needs to be addressed moving forward 
 
 
-
-
 ### Folder structure
 
 - Car.py : contains class that connects pyrep to coppeliasim
 - env.py : contains the Gym environment that will be used to train the agent in the simulated environment
-- car_2.ttt : contains the actual file that creates the simulated environment for the agent to ride on. 
-  This environment is different to handle more different kinds of turns.
+- LegoCar_Brown_Floor.ttt : contains the actual file that creates the simulated environment for the agent to ride on.
 - train.py : trains and evaluates the agent producing model files (model_eval.zip and mode_final.zip)
 - play.py : executes the trained agent and captures the frames to produce a gif
 - pi.py: file to run on raspberry pi to control the robot based on the model's output
 - laptop.py: file to run on a separate computer that can run the model and communicate with the raspberry pi
-
-
-
-
-
-
-### Take the new trained model and apply it to the lego car
-![Alt Text](Lego_raw.gif)
-![Alt Text](Lego_transformed.gif)
