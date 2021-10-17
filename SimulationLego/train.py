@@ -8,7 +8,6 @@ from env import lineFollower
 import numpy as np
 import pickle
 
-
 #--------------------------------------------------------Evaluation process
 # creates a function used by a separate process to evalulate the current model trained
 def evaluate_policy_process(model, n_eval_episodes,deterministic, queue):
@@ -61,10 +60,10 @@ class eval(BaseCallback):
 
         super().__init__()
         self._n_eval_episodes  = n_eval_episodes
-        self._eval_freq        = eval_freq
         self._deterministic    = deterministic
         self._reward_threshold = reward_threshold
         self._path             = path
+        self._eval_freq        = eval_freq
         self.queue             = queue
 
     def _on_step(self):
@@ -98,9 +97,11 @@ class eval(BaseCallback):
             if mean_reward >= self._reward_threshold and mean_reward > previous_run['reward']:
                 self.model.save(self._path + "_final")
                 previous_run["run"] = 0
-                previous_run["run"] = mean_reward
+                previous_run["reward"] = mean_reward
+
             elif previous_run["run"] > 2:
                 return False
+
             else:
                 previous_run["run"] += 1
                 with open('reward.pkl', 'wb') as beg:
@@ -122,18 +123,16 @@ def train(queue):
     # Create env to train
     train_env = lineFollower()
 
-
     # Specify model and feed the environment
     model = PPO2(CnnPolicy,
                  train_env,
                  n_steps=256)
 
-
     # Specify callback to evaluate training
     eval_callback = eval(n_eval_episodes  = 3,
                          deterministic    = True,
                          reward_threshold = 40000,
-                         path             = "model",
+                         path             = "model_output/model",
                          eval_freq        = 10000,
                          queue            = queue)
 

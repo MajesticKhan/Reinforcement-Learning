@@ -20,15 +20,15 @@ if sys.platform.startswith("linux") and ci_and_not_headless:
 
 #--------------------------------------------------------Create Class to connect to Coppeliasim
 class Car():
-    # Create a class that Pyrep can communicate with Coppeliasim using the car_2.ttt
 
+    # Create a class that Pyrep can communicate with Coppeliasim using the car_2.ttt
     # initialize Pyrep
-    def __init__(self, pathToScene = 'car_2.ttt'):
+
+    def __init__(self, pathToScene = 'LegoCar_Brown_Floor.ttt'):
         """
         Initialize the parameters to start the simulation
         :param pathToScene: path the coppeliasim environment
         """
-
 
         # Start the simulator
         SCENE_FILE = pathToScene
@@ -36,10 +36,8 @@ class Car():
         self.pr.launch(SCENE_FILE, headless = False)
         self.pr.start()
 
-
         # Set the car shape
         self.car = objects.shape.Shape("car")
-
 
         # establish steering connection
         self.front_right_steer = objects.joint.Joint("front_right_steer")
@@ -47,18 +45,15 @@ class Car():
         self.front_left_steer  = objects.joint.Joint("front_left_steer")
         self.rear_left_steer   = objects.joint.Joint("rear_left_steer")
 
-
         # establish motor connection
         self.front_right_motor = objects.joint.Joint("front_right_motor")
         self.rear_right_motor  = objects.joint.Joint("rear_right_motor")
         self.front_left_motor  = objects.joint.Joint("front_left_motor")
         self.rear_left_motor   = objects.joint.Joint("rear_left_motor")
 
-
         # establish steering position for rear wheels
         self.rear_right_steer.set_joint_target_velocity(0)
         self.rear_left_steer.set_joint_target_velocity(0)
-
 
         # Fix motor speed at a constant
         self.front_right_motor.set_joint_target_velocity(1)
@@ -66,10 +61,8 @@ class Car():
         self.front_left_motor.set_joint_target_velocity(1)
         self.rear_left_motor.set_joint_target_velocity(1)
 
-
         # Set Camera connection
         self.camera = objects.vision_sensor.VisionSensor("frontCamera")
-
 
     def captureImage(self):
 
@@ -139,16 +132,13 @@ class Car():
         # focus on smaller slice of image
         image = image[-35:,:,:]
 
-
         # Get the left and right boundaries of the car's hood
         left = image[:, 64-10, :]
         right = image[:, 192-10, :]
 
-
         # check if there is any blue
         left_check_blue = ((left[:, 0] <= 10) & (left[:, 1] <= 10) & (200 <= left[:, 2])).sum()
         right_check_blue = ((right[:, 0] <= 10) & (right[:, 1] <= 10) & (200 <= right[:, 2])).sum()
-
 
         # check if there is any Green
         check_green = ((image[:, :, 0] <= 10) & (200 <= image[:, :, 1]) & (image[:, :, 2] <= 10)).sum()
@@ -162,10 +152,8 @@ class Car():
 
     def updateSimulation(self):
 
-
         # Step through the simulation
         self.pr.step()
-
 
     def reset(self):
 
@@ -173,7 +161,6 @@ class Car():
         Return the car to the original position
         """
         self.car.set_pose([6.7750e+00,6.4750e+00,1.7500e-01,0,0, 7.08272636e-01 , 7.05938995e-01])
-
 
     def shutdown(self):
 

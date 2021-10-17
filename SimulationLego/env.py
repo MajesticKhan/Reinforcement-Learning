@@ -4,7 +4,6 @@ import numpy as np
 from gym.utils import seeding
 from gym import spaces
 from Car import Car
-from functions import imageTransformationLego
 
 #--------------------------------------------------------Class for Gym Environment
 class lineFollower(gym.Env):
@@ -36,8 +35,7 @@ class lineFollower(gym.Env):
         self.carAgent.updateSimulation()
 
         # get current state
-        self.raw_obs = self.carAgent.captureImage()
-        self.obs     = imageTransformationLego(self.raw_obs)
+        self.obs  = self.carAgent.captureImage()
 
         # get reward
         if action == 0:
@@ -65,7 +63,7 @@ class lineFollower(gym.Env):
         print("Action: {} | Reward: {} | Terminal State {}".format(action, self.reward, self.terminal))
 
         # return updated cycle given input action
-        return self.obs, self.reward, self.terminal, {"raw_obs":self.raw_obs}
+        return self.obs, self.reward, self.terminal, {}
 
 
     def seed(self, seed = None):

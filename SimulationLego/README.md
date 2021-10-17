@@ -1,7 +1,7 @@
 
-# Lego Car
-## Still in progress: updating model to handle new floor color
-![Alt Text](legoCar.png)
+# LegoCar vs Blue Masked Tape
+
+<img height="756" src="visuals/LegoCar.png" width="2016"/>
 
 
 ### Objective:
