@@ -1,7 +1,7 @@
 
 # LegoCar vs Blue Masked Tape
 
-<img height="756" src="visuals/LegoCar.png" width="2016"/>
+<img height="756" src="visuals/LegoCar.png" width="1008"/>
 
 
 ### Objective:
