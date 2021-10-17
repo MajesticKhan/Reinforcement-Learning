@@ -1,7 +1,7 @@
 
 # LegoCar vs Blue Masked Tape
 
-<img height="756" src="visuals/LegoCar.png" width="1008"/>
+<img src="visuals/LegoCar.png" width="100"/>
 
 
 ### Objective:
@@ -14,7 +14,7 @@ The  model is too big to run directly on the rasbberry pi directly. As a result,
 to the raspberry pi.
 
 
-<img src="visuals/workflow.png"/>
+<img src="visuals/workflow.png" width="100"/>
 
 ### Lego car's camera view!
 ![Alt Text](visuals/Lego_camera_view.gif)
