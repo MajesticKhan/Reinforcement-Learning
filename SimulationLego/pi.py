@@ -23,7 +23,6 @@ clientsocket, address = s.accept()
 
 #--------------------------------------------------------class for lego car
 class Car():
-
     """
     Class used to control lego car using BrickPi3
     """
@@ -34,6 +33,8 @@ class Car():
         self.steering_port = self.BP.PORT_A
         self.engine_L      = self.BP.PORT_C
 
+        # set up ultrasonic sensor
+        self.BP.set_sensor_type(self.BP.PORT_3, self.BP.SENSOR_TYPE.EV3_ULTRASONIC_CM)
 
     def update(self,action, drive = 1):
         # Translate numeric value to steering
@@ -46,6 +47,18 @@ class Car():
         self.BP.set_motor_position(self.steering_port,direction*90)
         self.BP.set_motor_power(self.engine_L, drive * 15)
 
+        distance = None
+        try:
+            distance = self.BP.get_sensor(self.BP.PORT_3)
+            print(distance)  # print the distance in CM
+        except brickpi3.SensorError as error:
+            print(error)
+
+        return distance
+
+    def shutdown(self):
+        self.update(2, 0)
+        self.BP.reset_all()
 
 #--------------------------------------------------------Load image
 
@@ -75,11 +88,13 @@ try:
 
             # receive action
             action = pickle.loads(clientsocket.recv(256))
-            if action not in list(range(3)):
-                legoCar.update(2,0)
+
+            # check to see if distance is less than 10 cm
+            distance = legoCar.update(action,1)
+
+            if distance != None and distance <10:
+                legoCar.shutdown()
                 s.close()
                 break
-            legoCar.update(action)
-
 finally:
     s.close()
